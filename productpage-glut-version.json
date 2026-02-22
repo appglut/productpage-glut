@@ -1,0 +1,13 @@
+{
+  "name": "ProductPageGlut",
+  "slug": "productpage-glut",
+  "version": "1.7.7",
+  "download_url": "https://updates.appglut.com/plugins/productpage-glut.zip",
+  "homepage": "https://github.com/appglut/productpage-glut",
+  "requires": "5.8",
+  "tested": "6.7",
+  "requires_php": "7.4",
+  "last_updated": "2025-02-22 00:00:00",
+  "author": "AppGlut",
+  "author_homepage": "https://appglut.com"
+}

@@ -1,0 +1,10 @@
+# Ignore all files by default
+/*
+
+# But track these deployment files
+!productpage-glut.zip
+!productpage-glut-version.json
+!.github/
+!.github/workflows/
+!.github/workflows/deploy.yml
+!.gitignore
