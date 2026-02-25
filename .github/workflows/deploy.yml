@@ -1,4 +1,4 @@
-name: Deploy ProductPageGlut to Hosting
+name: Deploy to Hosting
 
 on:
   push:
@@ -12,24 +12,28 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install lftp
         run: sudo apt-get update && sudo apt-get install -y lftp
 
-      - name: Deploy to hosting via FTP
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_REMOTE_DIR: ${{ secrets.FTP_REMOTE_DIR }}
+      - name: Deploy to hosting
         run: |
           lftp -c "
-            set ftp:ssl-allow no;
-            set ftp:passive-mode on;
-            open -u $FTP_USER,$FTP_PASSWORD $FTP_HOST;
-            cd $FTP_REMOTE_DIR;
-            put productpage-glut.zip;
-            put productpage-glut-version.json;
-            bye
+          set ssl:verify-certificate no;
+          open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
+          cd ${{ secrets.FTP_PATH }};
+          put productpage-glut.zip;
+          put productpage-glut-version.json;
+          close
           "
+
+      - name: Deployment Summary
+        run: |
+          echo "## Deployment Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Files synced:**" >> $GITHUB_STEP_SUMMARY
+          echo "- productpage-glut.zip" >> $GITHUB_STEP_SUMMARY
+          echo "- productpage-glut-version.json" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Destination:** \`${{ secrets.FTP_PATH }}\`" >> $GITHUB_STEP_SUMMARY
